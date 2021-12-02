@@ -1,4 +1,4 @@
-import  styled  from 'styled-components';
+import styled from 'styled-components';
 
 type HealthBarType = {
     width: number
@@ -15,7 +15,7 @@ height: 50px;
 const HealthBarDiv = styled.div`
     position: absolute;
     bottom: 10%;
-    left: 0%;
+    left: 0;
     height: 80%;
     transition: 0.5s;
     background: #f46652;

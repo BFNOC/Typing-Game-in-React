@@ -1,13 +1,14 @@
-import { assoc, merge } from "ramda";
-import { useState } from "react";
+import {assoc, mergeRight} from "ramda";
+import {useState} from "react";
 import styled from "styled-components";
-import { AnimatedHeader, InnerContainer, ViewContainer } from "../Common";
+import {AnimatedHeader, InnerContainer, ViewContainer} from "../Common";
 import TextOptions from "./TextOptions";
 import SpeedOptions from "./SpeedOptions";
-import { Checkbox } from "../../common/Checkbox";
+import {Checkbox} from "../../common/Checkbox";
 import Button from "../../common/Button";
-import { StartViewMobx } from "@/mobx/game";
-import { observer } from "mobx-react-lite";
+import {observer} from "mobx-react-lite";
+import {useRecoilState} from "recoil";
+import {StartViewAtom} from "@/atoms/game";
 
 const OptionsContainer = styled.div`
     display: flex;
@@ -32,13 +33,12 @@ const OptionsList = styled.div`
 `;
 
 const StartView = () => {
-    //const [startView, setStartView] = useRecoilState(StartViewAtom);
-    const startView = StartViewMobx;
+    const [startView, setStartView] = useRecoilState(StartViewAtom);
+
     const [animatingOut, setAnimatingOut] = useState(false);
 
     const handleHardcore = () => {
-        //setStartView(assoc("hardcore", !startView.hardcore, startView));
-        startView.Rehardcore(!startView.hardcore);
+        setStartView(assoc("hardcore", !startView.hardcore, startView));
     };
 
     const onStartGame = () => {
@@ -46,7 +46,6 @@ const StartView = () => {
         setTimeout(() => {
             const { selectedTextOptions, spawnRate, hardcore } = startView;
             if (selectedTextOptions.length >= 1) {
-                console.log(spawnRate);
                 handleGameStart(selectedTextOptions, spawnRate, hardcore);
             }
         }, 500);
@@ -57,20 +56,17 @@ const StartView = () => {
         spawnRate: number,
         hardcore: boolean
     ) => {
-        const rate = spawnRate;
-        // setStartView(
-        //     merge(startView, {
-        //         selectedTextOptions: textOptions,
-        //         currentView: "GameView",
-        //         spawnRate: rate,
-        //         hardcore: hardcore,
-        //     })
-        // );
-        startView.JumpGameStart(textOptions, rate, hardcore);
-        console.log(startView);
+        setStartView(
+            mergeRight(startView, {
+                selectedTextOptions: textOptions,
+                currentView: "GameView",
+                spawnRate: spawnRate,
+                hardcore: hardcore,
+            })
+        );
     };
 
-    const disabled = startView.selectedTextOptions.length >= 1 ? false : true;
+    const disabled = startView.selectedTextOptions.length < 1;
 
     const animatingOutObj = animatingOut ? { opacity: "1", top: "-150vh" } : {};
 

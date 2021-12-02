@@ -1,17 +1,12 @@
-import {
-    GameViewMobx,
-    GameViewOptionsPlayingType,
-    StartViewMobx,
-} from "@/mobx/game";
 import useInterval from "@/hooks/useInterval";
-import { isValidKey, randomIntInRange } from "@/utils";
-import { add, append, assoc, clone, flatten, inc, remove } from "ramda";
-import { ChangeEvent, useEffect, useState } from "react";
-import { atom } from "recoil";
-import { useRecoilState } from "recoil";
+import {isValidKey, randomIntInRange} from "@/utils";
+import {add, append, assoc, assocPath, clone, flatten, inc, mergeRight, remove} from "ramda";
+import {ChangeEvent, useEffect, useState} from "react";
+import {atom, useRecoilState} from "recoil";
 import HealthBar from "../HealthBar";
 import Targets from "./Targets";
-import { observer } from "mobx-react-lite";
+import {observer} from "mobx-react-lite";
+import {GameViewAtom, GameViewOptionsPlayingType, StartViewAtom} from "@/atoms/game";
 
 type GameViewStateType = {
     gameTime: number;
@@ -33,11 +28,9 @@ const data = {
     symbols: "<>;'\"[]{}+=()&%$#@!_-*:.,`?".split(""),
 };
 const GameView = () => {
-    //const [startView, setStartView] = useRecoilState(StartViewAtom);
-    const startView = StartViewMobx;
+    const [startView, setStartView] = useRecoilState(StartViewAtom)
     const [localGameView, setLocalGameView] = useRecoilState(localGameViewAtom);
-    //const [gameView, setGameView] = useRecoilState(GameViewAtom);
-    const gameView = GameViewMobx;
+    const [gameView, setGameView] = useRecoilState(GameViewAtom)
     const [animatingOut, setAnimatingOut] = useState(false);
     const spawnRate = localGameView.intSpeed * startView.spawnRate;
 
@@ -49,9 +42,10 @@ const GameView = () => {
                 return "";
             }
         });
-        //setGameView(assoc("options", flatten(temp_options), gameView));
-        gameView.UpdateOptions(flatten(temp_options));
+
+        setGameView(assoc("options", flatten(temp_options), gameView))
     }, []);
+
 
     const addNewItem = () => {
         if (gameView.options.length > 0) {
@@ -65,13 +59,10 @@ const GameView = () => {
                 remove: false,
                 deathTimer: 0,
             };
-
-            // setGameView((val) => {
-            //     val.optionsPlaying = append(item, val.optionsPlaying);
-            //     val.options = remove(index, 1, gameView.options);
-            //     return val;
-            // });
-            gameView.AddOptionsPlaying(item, index);
+            setGameView(mergeRight(gameView, {
+                optionsPlaying: append(item, gameView.optionsPlaying),
+                options: remove(index, 1, gameView.options)
+            }))
         }
     };
 
@@ -86,8 +77,7 @@ const GameView = () => {
                 temp_value.active = false;
                 temp_value.deathTimer = 0;
                 temp_value.hitHealth = true;
-                //setGameView(assoc("health", gameView.health - 10, gameView));
-                gameView.ReducingHealth(10);
+                setGameView(assoc("health", gameView.health - 10, gameView))
             }
             if (!value.active) {
                 temp_value.deathTimer = inc(temp_value.deathTimer);
@@ -96,33 +86,23 @@ const GameView = () => {
                 temp_value.remove = true;
             }
             if (value.remove) {
-                // setGameView(
-                //     assoc(
-                //         "options",
-                //         append(value.character, gameView.options),
-                //         gameView
-                //     )
-                // );
-                gameView.UpdateOptions(
-                    append(value.character, gameView.options)
-                );
+                setGameView(assoc("options", append(value.character, gameView.options), gameView))
             } else {
                 temp_options = append(temp_value, temp_options);
             }
         });
-        //setGameView(assoc("optionsPlaying", temp_options, gameView));
-        gameView.SetOptionsPlaying(temp_options);
+        setGameView(assoc("optionsPlaying", temp_options, gameView))
     };
 
     const handleGameOver = (score: number) => {
-        // setStartView(assoc("score", score, startView));
-        startView.UpdateScore(score);
+
+        setGameView(assoc("score", score, gameView))
         if (score > startView.highScore) {
-            // setStartView(assoc("highScore", score, startView));
-            startView.UpdateHighScore(score);
+
+            setStartView(assoc("highScore", score, startView))
         }
-        // setStartView(assoc("currentView", "GameOverView", startView));
-        startView.UpdateCurrentView("GameOverView");
+
+        setStartView(assoc("currentView", 'GameOverView', startView))
     };
 
     const onGameOver = () => {
@@ -145,7 +125,6 @@ const GameView = () => {
             }
 
             updatePositions();
-
             setLocalGameView(
                 assoc(
                     "gameTime",
@@ -156,24 +135,21 @@ const GameView = () => {
         }
     };
     useInterval(gameInterval, localGameView.intSpeed);
+
     const handleUserKeyInput = (e: ChangeEvent<HTMLInputElement>) => {
         let val = e.target.value.toLowerCase();
         let found = false;
-        gameView.optionsPlaying.forEach((el, index, arr) => {
+        gameView.optionsPlaying.forEach((el, index) => {
             if (val === el.character && el.active) {
                 found = true;
-                // setGameView((oldGameView) => {
-                //     oldGameView.optionsPlaying[index].active = false;
-                //     oldGameView.optionsPlaying[index].deathTimer = 0;
-                //     oldGameView.score++;
-                //     return oldGameView;
-                // });
-                gameView.ClickFound(index);
+
+                setGameView(assocPath(['optionsPlaying', index, 'active'], false, gameView))
+                setGameView(assocPath(['optionsPlaying', index, 'deathTimer'], 0, gameView))
+                setGameView(assoc("score", inc(gameView.score), gameView))
             }
         });
         if (!found && startView.hardcore) {
-            //setGameView(assoc("health", gameView.health - 10, gameView));
-            gameView.ReducingHealth(10);
+            setGameView(assoc("health", gameView.health - 10, gameView))
         }
         e.target.value = "";
     };
@@ -202,9 +178,9 @@ const GameView = () => {
                 type="text"
                 autoFocus
                 onChange={handleUserKeyInput}
-                style={{ opacity: 0, fontSize: "20px" }}
+                style={{opacity: 0, fontSize: "20px"}}
             />
-            <Targets />
+            <Targets/>
             <button
                 onClick={() => {
                     console.log(gameView);
@@ -212,7 +188,7 @@ const GameView = () => {
             >
                 点我
             </button>
-            <HealthBar width={gameView.health} />
+            <HealthBar width={gameView.health}/>
         </div>
     );
 };

@@ -7,10 +7,8 @@ specifiers:
   '@types/react-dom': ^17.0.0
   '@types/styled-components': ^5.1.15
   '@vitejs/plugin-react': ^1.0.0
-  immer: ^9.0.7
   mobx: ^6.3.8
   mobx-react-lite: ^3.2.2
-  nanoid: ^3.1.30
   ramda: ^0.27.1
   react: ^17.0.0
   react-dom: ^17.0.0
@@ -20,10 +18,8 @@ specifiers:
   vite: ^2.6.4
 
 dependencies:
-  immer: 9.0.7
   mobx: 6.3.8
   mobx-react-lite: 3.2.2_02876c366ce89e988b8bf5dff3cf0e00
-  nanoid: 3.1.30
   ramda: 0.27.1
   react: 17.0.2
   react-dom: 17.0.2_react@17.0.2
@@ -738,10 +734,6 @@ packages:
     dependencies:
       react-is: 16.13.1
 
-  /immer/9.0.7:
-    resolution: {integrity: sha512-KGllzpbamZDvOIxnmJ0jI840g7Oikx58lBPWV0hUh7dtAyZpFqqrBZdKka5GlTwMTZ1Tjc/bKKW4VSFAt6BqMA==}
-    dev: false
-
   /is-core-module/2.8.0:
     resolution: {integrity: sha512-vd15qHsaqrRL7dtH6QNuy0ndJmRDrS9HAM1CAiSifNUFv4x1a0CCVsj18hJ1mShxIG6T2i1sO78MkP56r0nYRw==}
     dependencies:
@@ -808,6 +800,7 @@ packages:
     resolution: {integrity: sha512-zJpuPDwOv8D2zq2WRoMe1HsfZthVewpel9CAvTfc/2mBD1uUT/agc5f7GHGWXlYkFvi1mVxe4IjvP2HNrop7nQ==}
     engines: {node: ^10 || ^12 || ^13.7 || ^14 || >=15.0.1}
     hasBin: true
+    dev: true
 
   /node-releases/2.0.1:
     resolution: {integrity: sha512-CqyzN6z7Q6aMeF/ktcMVTzhAHCEpf8SOarwpzpf8pNBY2k5/oM34UHldUwp8VKI7uxct2HxSRdJjBaZeESzcxA==}

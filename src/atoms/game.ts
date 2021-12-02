@@ -1,6 +1,6 @@
 import { atom } from "recoil";
 
-type StartViewType = {
+export type StartViewType = {
     currentView: string;
     selectedTextOptions: string[];
     textOptions: string[];
@@ -10,7 +10,7 @@ type StartViewType = {
     highScore: number;
 };
 
-type GameViewOptionsPlayingType = {
+export type GameViewOptionsPlayingType = {
     character: string;
     xPosition: number;
     yPosition: number;
@@ -20,7 +20,7 @@ type GameViewOptionsPlayingType = {
     deathTimer: number;
 };
 
-type GameViewType = {
+export type GameViewType = {
     selectedCategories: string[];
     options: string[];
     optionsPlaying: GameViewOptionsPlayingType[];
@@ -29,7 +29,7 @@ type GameViewType = {
     health: number;
 };
 
-const StartViewAtom = atom<StartViewType>({
+export const StartViewAtom = atom<StartViewType>({
     key: "app-StartViewAtom",
     default: {
         currentView: "StartView",
@@ -42,7 +42,7 @@ const StartViewAtom = atom<StartViewType>({
     },
 });
 
-const GameViewAtom = atom<GameViewType>({
+export const GameViewAtom = atom<GameViewType>({
     key: "app-GameViewAtom",
     default: {
         selectedCategories: [],

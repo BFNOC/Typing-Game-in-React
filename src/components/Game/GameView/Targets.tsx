@@ -1,12 +1,10 @@
-import { GameViewMobx, GameViewOptionsPlayingType } from "@/mobx/game";
-import { nanoid } from "nanoid";
 import { useRecoilValue } from "recoil";
 import { localGameViewAtom } from "./Index";
+import {GameViewAtom, GameViewOptionsPlayingType} from "@/atoms/game";
 
 const Targets = () => {
-    //const gameView = useRecoilValue(GameViewAtom);
+    const gameView = useRecoilValue(GameViewAtom);
     const localGameView = useRecoilValue(localGameViewAtom);
-    const gameView = GameViewMobx;
 
     let temp = gameView.optionsPlaying.map(
         (val: GameViewOptionsPlayingType) => {
