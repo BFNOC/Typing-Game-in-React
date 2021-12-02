@@ -1,7 +1,6 @@
 import { Checkbox } from "@/components/common/Checkbox";
 import { append, assoc, remove } from "ramda";
 import { useRecoilState } from "recoil";
-import { observer } from "mobx-react-lite";
 import {StartViewAtom} from "@/atoms/game";
 
 const TextOptions = () => {
@@ -48,4 +47,4 @@ const TextOptions = () => {
     return <>{textOptions}</>;
 };
 
-export default observer(TextOptions);
+export default TextOptions;

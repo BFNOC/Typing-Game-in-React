@@ -5,7 +5,6 @@ import {ChangeEvent, useEffect, useState} from "react";
 import {atom, useRecoilState} from "recoil";
 import HealthBar from "../HealthBar";
 import Targets from "./Targets";
-import {observer} from "mobx-react-lite";
 import {GameViewAtom, GameViewOptionsPlayingType, StartViewAtom} from "@/atoms/game";
 
 type GameViewStateType = {
@@ -193,4 +192,4 @@ const GameView = () => {
     );
 };
 
-export default observer(GameView);
+export default GameView;

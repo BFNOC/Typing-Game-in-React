@@ -6,7 +6,6 @@ import TextOptions from "./TextOptions";
 import SpeedOptions from "./SpeedOptions";
 import {Checkbox} from "../../common/Checkbox";
 import Button from "../../common/Button";
-import {observer} from "mobx-react-lite";
 import {useRecoilState} from "recoil";
 import {StartViewAtom} from "@/atoms/game";
 
@@ -112,4 +111,4 @@ const StartView = () => {
         </ViewContainer>
     );
 };
-export default observer(StartView);
+export default StartView;

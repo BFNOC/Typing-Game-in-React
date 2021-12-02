@@ -1,7 +1,6 @@
 import { assoc } from "ramda";
 import { useRecoilState } from "recoil";
 import { Checkbox } from "../../common/Checkbox";
-import { observer } from "mobx-react-lite";
 import {StartViewAtom} from "@/atoms/game";
 
 const SpeedOptions = () => {
@@ -33,4 +32,4 @@ const SpeedOptions = () => {
     return <>{temp}</>;
 };
 
-export default observer(SpeedOptions);
+export default SpeedOptions;

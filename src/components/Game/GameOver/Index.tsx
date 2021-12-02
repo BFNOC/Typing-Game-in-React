@@ -3,7 +3,6 @@ import {useState} from "react";
 import {useRecoilState} from "recoil";
 import {AnimatedHeader, InnerContainer, ViewContainer} from "../Common";
 import Button from "@/components/common/Button";
-import {observer} from "mobx-react-lite";
 import {StartViewAtom} from "@/atoms/game";
 import {assoc} from "ramda";
 
@@ -96,4 +95,4 @@ const GameOver = () => {
     );
 };
 
-export default observer(GameOver);
+export default GameOver;
