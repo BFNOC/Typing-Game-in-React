@@ -1,10 +1,9 @@
 import styled from "styled-components";
-import { useState } from "react";
-import { useRecoilState } from "recoil";
-import { AnimatedHeader, InnerContainer, ViewContainer } from "../Common";
+import {useState} from "react";
+import {AnimatedHeader, InnerContainer, ViewContainer} from "../Common";
 import Button from "@/components/common/Button";
-import { StartViewMobx } from "@/mobx/game";
-import { observer } from "mobx-react-lite";
+import {StartViewMobx} from "@/mobx/game";
+import {observer} from "mobx-react-lite";
 
 const GameOverContainer = styled.div`
     @keyframes scale-in {
@@ -28,7 +27,6 @@ const GameOverContainer = styled.div`
 
 const GameOver = () => {
     const [animatingOut, setAnimatingOut] = useState(false);
-    //const [startView, setStartView] = useRecoilState(StartViewAtom);
     const startView = StartViewMobx;
 
     const restartGame = () => {
@@ -43,14 +41,13 @@ const GameOver = () => {
         if (i === arr.length - 1) {
             tail = "";
         }
-        let text = el.charAt(0).toUpperCase() + el.slice(1) + tail;
-        return text;
+        return el.charAt(0).toUpperCase() + el.slice(1) + tail;
     });
 
     const highScoreText =
         startView.score === startView.highScore ? "New Highscore!" : "";
 
-    let spawnSpeedText = "";
+    let spawnSpeedText;
     switch (startView.spawnRate) {
         case 10:
             spawnSpeedText = "Faster";

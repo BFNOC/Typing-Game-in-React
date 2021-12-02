@@ -1,14 +1,10 @@
-import { GameViewMobx, GameViewOptionsPlayingType } from "@/mobx/game";
-import { nanoid } from "nanoid";
-import { useRecoilValue } from "recoil";
-import { localGameViewAtom } from "./Index";
+import {GameViewMobx, GameViewOptionsPlayingType} from "@/mobx/game";
+import {useRecoilValue} from "recoil";
+import {localGameViewAtom} from "./Index";
 
 const Targets = () => {
-    //const gameView = useRecoilValue(GameViewAtom);
     const localGameView = useRecoilValue(localGameViewAtom);
-    const gameView = GameViewMobx;
-
-    let temp = gameView.optionsPlaying.map(
+    let temp = GameViewMobx.optionsPlaying.map(
         (val: GameViewOptionsPlayingType) => {
             const style = {
                 position: "absolute",

@@ -1,14 +1,10 @@
-import { useRecoilValue } from "recoil";
 import GameOver from "./GameOver/Index";
 import GameView from "./GameView/Index";
 import StartView from "./StartView/Index";
-import { assoc } from "ramda";
 import { StartViewMobx } from "@/mobx/game";
 import { observer } from "mobx-react-lite";
 const Game = () => {
-    //const startView = useRecoilValue(StartViewAtom);
     const startView = StartViewMobx;
-
     if (startView.currentView === "StartView") {
         console.log("Now" + "StartView");
         return <StartView />;

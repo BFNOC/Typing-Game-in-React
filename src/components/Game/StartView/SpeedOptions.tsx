@@ -1,14 +1,10 @@
 import { StartViewMobx } from "@/mobx/game";
-import { assoc } from "ramda";
-import { useRecoilState } from "recoil";
 import { Checkbox } from "../../common/Checkbox";
 import { observer } from "mobx-react-lite";
 
 const SpeedOptions = () => {
-    //const [startView, setStartViewAtom] = useRecoilState(StartViewAtom);
     const startView = StartViewMobx;
     const handleSpeedUpdate = (value: number) => {
-        //setStartViewAtom(assoc("spawnRate", value, startView));
         startView.SpeedUpdate(value);
     };
 

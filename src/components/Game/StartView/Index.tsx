@@ -1,13 +1,12 @@
-import { assoc, merge } from "ramda";
-import { useState } from "react";
+import {useState} from "react";
 import styled from "styled-components";
-import { AnimatedHeader, InnerContainer, ViewContainer } from "../Common";
+import {AnimatedHeader, InnerContainer, ViewContainer} from "../Common";
 import TextOptions from "./TextOptions";
 import SpeedOptions from "./SpeedOptions";
-import { Checkbox } from "../../common/Checkbox";
+import {Checkbox} from "../../common/Checkbox";
 import Button from "../../common/Button";
-import { StartViewMobx } from "@/mobx/game";
-import { observer } from "mobx-react-lite";
+import {StartViewMobx} from "@/mobx/game";
+import {observer} from "mobx-react-lite";
 
 const OptionsContainer = styled.div`
     display: flex;
@@ -32,12 +31,10 @@ const OptionsList = styled.div`
 `;
 
 const StartView = () => {
-    //const [startView, setStartView] = useRecoilState(StartViewAtom);
     const startView = StartViewMobx;
     const [animatingOut, setAnimatingOut] = useState(false);
 
     const handleHardcore = () => {
-        //setStartView(assoc("hardcore", !startView.hardcore, startView));
         startView.Rehardcore(!startView.hardcore);
     };
 
@@ -57,20 +54,10 @@ const StartView = () => {
         spawnRate: number,
         hardcore: boolean
     ) => {
-        const rate = spawnRate;
-        // setStartView(
-        //     merge(startView, {
-        //         selectedTextOptions: textOptions,
-        //         currentView: "GameView",
-        //         spawnRate: rate,
-        //         hardcore: hardcore,
-        //     })
-        // );
-        startView.JumpGameStart(textOptions, rate, hardcore);
-        console.log(startView);
+        startView.JumpGameStart(textOptions, spawnRate, hardcore);
     };
 
-    const disabled = startView.selectedTextOptions.length >= 1 ? false : true;
+    const disabled = startView.selectedTextOptions.length < 1;
 
     const animatingOutObj = animatingOut ? { opacity: "1", top: "-150vh" } : {};
 

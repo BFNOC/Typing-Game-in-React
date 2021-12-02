@@ -5,7 +5,7 @@ import {
 } from "@/mobx/game";
 import useInterval from "@/hooks/useInterval";
 import { isValidKey, randomIntInRange } from "@/utils";
-import { add, append, assoc, clone, flatten, inc, remove } from "ramda";
+import { add, append, assoc, clone, flatten, inc } from "ramda";
 import { ChangeEvent, useEffect, useState } from "react";
 import { atom } from "recoil";
 import { useRecoilState } from "recoil";
@@ -33,10 +33,8 @@ const data = {
     symbols: "<>;'\"[]{}+=()&%$#@!_-*:.,`?".split(""),
 };
 const GameView = () => {
-    //const [startView, setStartView] = useRecoilState(StartViewAtom);
     const startView = StartViewMobx;
     const [localGameView, setLocalGameView] = useRecoilState(localGameViewAtom);
-    //const [gameView, setGameView] = useRecoilState(GameViewAtom);
     const gameView = GameViewMobx;
     const [animatingOut, setAnimatingOut] = useState(false);
     const spawnRate = localGameView.intSpeed * startView.spawnRate;
@@ -49,7 +47,6 @@ const GameView = () => {
                 return "";
             }
         });
-        //setGameView(assoc("options", flatten(temp_options), gameView));
         gameView.UpdateOptions(flatten(temp_options));
     }, []);
 
@@ -65,12 +62,6 @@ const GameView = () => {
                 remove: false,
                 deathTimer: 0,
             };
-
-            // setGameView((val) => {
-            //     val.optionsPlaying = append(item, val.optionsPlaying);
-            //     val.options = remove(index, 1, gameView.options);
-            //     return val;
-            // });
             gameView.AddOptionsPlaying(item, index);
         }
     };
@@ -86,7 +77,6 @@ const GameView = () => {
                 temp_value.active = false;
                 temp_value.deathTimer = 0;
                 temp_value.hitHealth = true;
-                //setGameView(assoc("health", gameView.health - 10, gameView));
                 gameView.ReducingHealth(10);
             }
             if (!value.active) {
@@ -96,13 +86,6 @@ const GameView = () => {
                 temp_value.remove = true;
             }
             if (value.remove) {
-                // setGameView(
-                //     assoc(
-                //         "options",
-                //         append(value.character, gameView.options),
-                //         gameView
-                //     )
-                // );
                 gameView.UpdateOptions(
                     append(value.character, gameView.options)
                 );
@@ -110,18 +93,15 @@ const GameView = () => {
                 temp_options = append(temp_value, temp_options);
             }
         });
-        //setGameView(assoc("optionsPlaying", temp_options, gameView));
+
         gameView.SetOptionsPlaying(temp_options);
     };
 
     const handleGameOver = (score: number) => {
-        // setStartView(assoc("score", score, startView));
         startView.UpdateScore(score);
         if (score > startView.highScore) {
-            // setStartView(assoc("highScore", score, startView));
             startView.UpdateHighScore(score);
         }
-        // setStartView(assoc("currentView", "GameOverView", startView));
         startView.UpdateCurrentView("GameOverView");
     };
 
@@ -159,20 +139,13 @@ const GameView = () => {
     const handleUserKeyInput = (e: ChangeEvent<HTMLInputElement>) => {
         let val = e.target.value.toLowerCase();
         let found = false;
-        gameView.optionsPlaying.forEach((el, index, arr) => {
+        gameView.optionsPlaying.forEach((el, index) => {
             if (val === el.character && el.active) {
                 found = true;
-                // setGameView((oldGameView) => {
-                //     oldGameView.optionsPlaying[index].active = false;
-                //     oldGameView.optionsPlaying[index].deathTimer = 0;
-                //     oldGameView.score++;
-                //     return oldGameView;
-                // });
                 gameView.ClickFound(index);
             }
         });
         if (!found && startView.hardcore) {
-            //setGameView(assoc("health", gameView.health - 10, gameView));
             gameView.ReducingHealth(10);
         }
         e.target.value = "";
